@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS members(
+    id INT GENERATED ALWAYS AS IDENTITY
+        CONSTRAINT pk_members_id PRIMARY KEY,
+    code VARCHAR(255) NOT NULL,
+        CONSTRAINT uq_members_code UNIQUE(code),
+    name VARCHAR(255) NOT NULL
+);

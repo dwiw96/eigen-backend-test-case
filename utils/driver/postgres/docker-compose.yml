@@ -1,0 +1,11 @@
+services:
+  db:
+    container_name: postgres_eigen_book_project
+    image: postgres
+    restart: no
+    environment:
+      - POSTGRES_USER=dwiwahyudi
+      - POSTGRES_PASSWORD=eigen123
+      - POSTGRES_DB=eigen_book_project
+    ports:
+      - 5432:5432
