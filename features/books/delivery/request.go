@@ -24,3 +24,8 @@ func toBooksDelivery(input []BooksRequest) (res []books.Books) {
 
 	return
 }
+
+type BorrowBookRequest struct {
+	BookCode   string `json:"book_code"`
+	MemberCode string `json:"member_code"`
+}
