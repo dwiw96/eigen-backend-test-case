@@ -6,7 +6,9 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -47,6 +49,100 @@ func (r *booksRepository) InsertListOfBooks(input []books.Books) (err error) {
 	if affectedRows <= 0 {
 		errMsg := fmt.Errorf("no books added to database for insert list of books")
 		log.Println("no rows are affected for insert list of books")
+		return errMsg
+	}
+
+	return err
+}
+
+func (r *booksRepository) GetBookData(bookCode string) (book books.Books, err error) {
+	query := `SELECT * FROM books WHERE code=$1`
+
+	row := r.db.QueryRow(r.ctx, query, bookCode)
+	err = row.Scan(&book.ID, &book.Code, &book.Title, &book.Author, &book.Stock)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			log.Printf("error get book data for code: %s, err: %v\n", bookCode, err)
+			return books.Books{}, err
+		}
+		errMsg := fmt.Errorf("error scan get book data")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return books.Books{}, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) CheckIfBookIsAvailable(bookID int) (res int, err error) {
+	query := `SELECT COUNT(*) FROM borrowed_books WHERE book_id=$1 AND is_returned=FALSE`
+
+	err = r.db.QueryRow(r.ctx, query, bookID).Scan(&res)
+	if err != nil {
+		errMsg := fmt.Errorf("error check if book is available")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return 0, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) GetMemberData(memberCode string) (member books.Member, err error) {
+	query := `SELECT * FROM members WHERE code = $1`
+
+	err = r.db.QueryRow(r.ctx, query, memberCode).Scan(&member.ID, &member.Code, &member.Name)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			log.Printf("error get member data for code: %s, err: %v\n", memberCode, err)
+			return books.Member{}, err
+		}
+		errMsg := fmt.Errorf("error scan get member data")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return books.Member{}, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) CheckMemberBorrowedBooks(memberID int) (res int, err error) {
+	query := `SELECT COUNT(*) FROM borrowed_books WHERE member_id = $1 AND is_returned=FALSE `
+
+	err = r.db.QueryRow(r.ctx, query, memberID).Scan(&res)
+	if err != nil {
+		errMsg := fmt.Errorf("error check member borrowed books")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return 0, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) CheckIfMemberPenalized(memberID int) (res bool, err error) {
+	query := `SELECT EXISTS(SELECT 1 FROM penalized_members WHERE member_id = $1 AND penalty_end > NOW())`
+
+	err = r.db.QueryRow(r.ctx, query, memberID).Scan(&res)
+	if err != nil {
+		errMsg := fmt.Errorf("error check if member penalized")
+		log.Printf("%v, err: %v\n", errMsg, err)
+	}
+
+	return
+}
+
+func (r *booksRepository) InsertBorrowedBook(bookID, memberID int) (err error) {
+	query := `INSERT INTO borrowed_books(book_id, member_id, borrowed_at, is_returned) 
+	VALUES($1, $2, $3, $4)`
+
+	res, err := r.db.Exec(r.ctx, query, bookID, memberID, time.Now().UTC(), false)
+	if err != nil {
+		errMsg := fmt.Errorf("error insert borrowed book")
+		log.Printf("%v, err:%v\n", errMsg, err)
+		return errMsg
+	}
+
+	affectedRows := res.RowsAffected()
+	if affectedRows <= 0 {
+		errMsg := fmt.Errorf("no books added to database for insert borrowed book")
+		log.Println("no rows are affected for insert borrowed book")
 		return errMsg
 	}
 
