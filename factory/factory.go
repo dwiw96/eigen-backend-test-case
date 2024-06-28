@@ -18,7 +18,7 @@ func InitFactory(cfg *config.EnvConfig, db *pgxpool.Pool, router *httprouter.Rou
 	log.Println("<- init factory")
 
 	booksRepoInterface := booksRepository.NewBooksRepository(db, ctx)
-	booksServiceInterface := booksService.NewBooksService(booksRepoInterface, ctx)
+	booksServiceInterface := booksService.NewBooksService(booksRepoInterface, ctx, db)
 	booksDelivery.NewbooksDelivery(router, booksServiceInterface)
 
 	log.Println("-> init factory")

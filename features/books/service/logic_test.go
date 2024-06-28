@@ -11,7 +11,7 @@ import (
 	repo "eigen-backend-test-case/features/books/repository"
 	postgres "eigen-backend-test-case/utils/driver/postgres"
 
-	// "github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -39,7 +39,7 @@ func TestMain(m *testing.M) {
 
 	repoTest := repo.NewBooksRepository(db, ctx)
 
-	serviceTest = NewBooksService(repoTest, ctx)
+	serviceTest = NewBooksService(repoTest, ctx, db)
 
 	os.Exit(m.Run())
 }
@@ -112,6 +112,53 @@ func TestInsertListOfBooks(t *testing.T) {
 				require.NoError(t, err)
 			} else {
 				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestBorrowBook(t *testing.T) {
+	tests := []struct {
+		name       string
+		bookCode   string
+		memberCode string
+		ans        books.Books
+		err        bool
+	}{
+		{
+			name:       "success1",
+			bookCode:   "JK-45",
+			memberCode: "M006",
+			ans: books.Books{
+				ID:     1,
+				Code:   "JK-45",
+				Title:  "Harry Potter",
+				Author: "J.K Rowling",
+				Stock:  1,
+			},
+			err: false,
+		}, {
+			name:       "error1",
+			bookCode:   "ACD-03",
+			memberCode: "M004",
+			err:        true,
+		}, {
+			name:       "error2",
+			bookCode:   "JK-45",
+			memberCode: "M006",
+			err:        true,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			book, isServerErr, err := serviceTest.BorrowBooks(v.memberCode, v.bookCode)
+			if !v.err {
+				require.NoError(t, err)
+				assert.Equal(t, v.ans, book)
+			} else {
+				require.Error(t, err)
+				assert.False(t, isServerErr)
 			}
 		})
 	}

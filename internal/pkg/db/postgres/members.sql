@@ -5,3 +5,7 @@ CREATE TABLE IF NOT EXISTS members(
         CONSTRAINT uq_members_code UNIQUE(code),
     name VARCHAR(255) NOT NULL
 );
+
+CREATE INDEX ix_members_id ON members(id);
+CREATE INDEX ix_members_code ON members(code);
+CREATE INDEX ix_members_name ON members(name);

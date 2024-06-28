@@ -7,3 +7,8 @@ CREATE TABLE IF NOT EXISTS books(
     author VARCHAR(255) NOT NULL,
     stock INT
 );
+
+CREATE INDEX ix_books_id ON books(id);
+CREATE INDEX ix_books_code ON books(code);
+CREATE INDEX ix_books_title ON books(title);
+CREATE INDEX ix_books_author ON books(author);
