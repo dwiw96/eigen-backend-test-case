@@ -163,3 +163,43 @@ func TestBorrowBook(t *testing.T) {
 		})
 	}
 }
+
+func TestReturnBook(t *testing.T) {
+	tests := []struct {
+		name       string
+		memberCode string
+		bookCode   string
+		err        bool
+	}{
+		{
+			name:       "success1",
+			memberCode: "M004",
+			bookCode:   "ACD-02",
+			err:        false,
+		}, {
+			name:       "error1",
+			memberCode: "M004",
+			bookCode:   "JK-45",
+			err:        true,
+		}, {
+			name:       "error2",
+			memberCode: "M006",
+			bookCode:   "SHR-1",
+			err:        true,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			isServerErrm, err := serviceTest.ReturnBook(v.memberCode, v.bookCode)
+			if !v.err {
+				require.NoError(t, err)
+			} else {
+				require.Error(t, err)
+				if v.name == "error2" {
+					assert.False(t, isServerErrm)
+				}
+			}
+		})
+	}
+}
