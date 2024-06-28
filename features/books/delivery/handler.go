@@ -25,6 +25,7 @@ func NewbooksDelivery(router *httprouter.Router, service books.ServiceInterface)
 
 	router.POST("/api/v1/books/insert_list_of_books", middleware.Cors(handler.InsertListOfBooks))
 	router.POST("/api/v1/books/borrow_book", middleware.Cors(handler.BorrowBook))
+	router.PUT("/api/v1/books/return_book", middleware.Cors(handler.ReturnBook))
 }
 
 func (d *booksDelivery) InsertListOfBooks(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -77,4 +78,30 @@ func (d *booksDelivery) BorrowBook(w http.ResponseWriter, r *http.Request, _ htt
 	w.Header().Add("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(responses.SuccessWithDataResponse(response, "borrowed book data"))
+}
+
+func (d *booksDelivery) ReturnBook(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	log.Println("<<< receive: return book")
+
+	var request BorrowBookRequest
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		responses.ErrorJSON(w, http.StatusUnprocessableEntity, "Unprocessable Entity", err.Error(), r.RemoteAddr)
+		return
+	}
+
+	isServerErr, err := d.service.ReturnBook(request.MemberCode, request.BookCode)
+	if err != nil {
+		if !isServerErr {
+			responses.ErrorJSON(w, http.StatusBadRequest, "Bad Request", err.Error(), r.RemoteAddr)
+			return
+		}
+		responses.ErrorJSON(w, http.StatusInternalServerError, "Internal Server Error", err.Error(), r.RemoteAddr)
+		return
+	}
+
+	log.Printf(">>> response: return book, %d - %s\n", http.StatusOK, r.RemoteAddr)
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(responses.SuccessResponse("book is returned"))
 }

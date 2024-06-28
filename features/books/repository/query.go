@@ -8,6 +8,8 @@ import (
 	"strings"
 	"time"
 
+	helper "eigen-backend-test-case/utils/helper"
+
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
@@ -132,7 +134,7 @@ func (r *booksRepository) InsertBorrowedBook(bookID, memberID int) (err error) {
 	query := `INSERT INTO borrowed_books(book_id, member_id, borrowed_at, is_returned) 
 	VALUES($1, $2, $3, $4)`
 
-	res, err := r.db.Exec(r.ctx, query, bookID, memberID, time.Now().UTC(), false)
+	res, err := r.db.Exec(r.ctx, query, bookID, memberID, helper.FormatGoTime(time.Now().UTC()), false)
 	if err != nil {
 		errMsg := fmt.Errorf("error insert borrowed book")
 		log.Printf("%v, err:%v\n", errMsg, err)
@@ -147,4 +149,50 @@ func (r *booksRepository) InsertBorrowedBook(bookID, memberID int) (err error) {
 	}
 
 	return err
+}
+
+func (r *booksRepository) CheckMemberBorrowedValidBook(memberID, bookID int) (res bool, err error) {
+	query := `SELECT EXISTS(SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2 AND is_returned = FALSE)`
+
+	err = r.db.QueryRow(r.ctx, query, memberID, bookID).Scan(&res)
+	if err != nil {
+		errMsg := fmt.Errorf("error check member borrowed valid book")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return false, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) UpdateBorrowedBookToReturned(id int) (err error) {
+	query := `UPDATE borrowed_books SET returned_at = $1, is_returned = TRUE WHERE id = $2`
+
+	res, err := r.db.Exec(r.ctx, query, helper.FormatGoTime(time.Now()).UTC(), id)
+	if err != nil {
+		errMsg := fmt.Errorf("error update borrowed book to returned")
+		log.Printf("%v, err:%v\n", errMsg, err)
+		return errMsg
+	}
+
+	affectedRows := res.RowsAffected()
+	if affectedRows <= 0 {
+		errMsg := fmt.Errorf("no row updated for update borrowed book to returned")
+		log.Println("no rows are affected for update borrowed book to returned")
+		return errMsg
+	}
+
+	return err
+}
+
+func (r *booksRepository) GetBorrowedBookData(memberID, bookID int) (res books.BorrowedBooks, err error) {
+	query := `SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2`
+
+	err = r.db.QueryRow(r.ctx, query, memberID, bookID).Scan(&res.ID, &res.BookID, &res.MemberID, &res.BorrowedAt, &res.ReturnedAt, &res.IsReturned)
+	if err != nil {
+		errMsg := fmt.Errorf("error get borrowed book data")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return books.BorrowedBooks{}, errMsg
+	}
+
+	return
 }

@@ -104,3 +104,36 @@ func (s *booksService) BorrowBooks(memberCode, bookCode string) (book books.Book
 
 	return bookData, isServerErr, err
 }
+
+func (s *booksService) ReturnBook(memberCode, bookCode string) (isServerErr bool, err error) {
+	// get the book information
+	bookData, err := s.repo.GetBookData(bookCode)
+	if err != nil {
+		return true, err
+	}
+
+	// get member information
+	memberData, err := s.repo.GetMemberData(memberCode)
+	if err != nil {
+		return true, err
+	}
+
+	// check if member borrowed the book
+	isBookValid, err := s.repo.CheckMemberBorrowedValidBook(memberData.ID, bookData.ID)
+	if err != nil {
+		return true, err
+	}
+	if !isBookValid {
+		return false, fmt.Errorf("member is not borrowed this book")
+	}
+
+	// return the book
+	borrowedBooksData, err := s.repo.GetBorrowedBookData(memberData.ID, bookData.ID)
+	if err != nil {
+		return true, err
+	}
+
+	err = s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+
+	return true, err
+}
