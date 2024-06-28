@@ -164,34 +164,56 @@ func (r *booksRepository) CheckMemberBorrowedValidBook(memberID, bookID int) (re
 	return
 }
 
-func (r *booksRepository) UpdateBorrowedBookToReturned(id int) (err error) {
+func (r *booksRepository) UpdateBorrowedBookToReturned(id int) (returnedTime time.Time, err error) {
 	query := `UPDATE borrowed_books SET returned_at = $1, is_returned = TRUE WHERE id = $2`
 
-	res, err := r.db.Exec(r.ctx, query, helper.FormatGoTime(time.Now()).UTC(), id)
+	returnedTime = helper.FormatGoTime(time.Now()).UTC()
+	res, err := r.db.Exec(r.ctx, query, returnedTime, id)
 	if err != nil {
 		errMsg := fmt.Errorf("error update borrowed book to returned")
 		log.Printf("%v, err:%v\n", errMsg, err)
-		return errMsg
+		return time.Time{}, errMsg
 	}
 
 	affectedRows := res.RowsAffected()
 	if affectedRows <= 0 {
 		errMsg := fmt.Errorf("no row updated for update borrowed book to returned")
 		log.Println("no rows are affected for update borrowed book to returned")
-		return errMsg
+		return time.Time{}, errMsg
 	}
 
-	return err
+	return returnedTime, err
 }
 
 func (r *booksRepository) GetBorrowedBookData(memberID, bookID int) (res books.BorrowedBooks, err error) {
-	query := `SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2`
+	query := `SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2 ORDER BY id DESC LIMIT 1`
 
 	err = r.db.QueryRow(r.ctx, query, memberID, bookID).Scan(&res.ID, &res.BookID, &res.MemberID, &res.BorrowedAt, &res.ReturnedAt, &res.IsReturned)
 	if err != nil {
 		errMsg := fmt.Errorf("error get borrowed book data")
 		log.Printf("%v, err: %v\n", errMsg, err)
 		return books.BorrowedBooks{}, errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) InsertPenalty(memberID int, pinaltyStart, pinaltyEnd time.Time) (err error) {
+	query := `INSERT INTO penalized_members(member_id, penalty_start, penalty_end) 
+	VALUES($1, $2, $3)`
+
+	res, err := r.db.Exec(r.ctx, query, memberID, pinaltyStart, pinaltyEnd)
+	if err != nil {
+		errMsg := fmt.Errorf("error insert penalty")
+		log.Printf("%v, err:%v\n", errMsg, err)
+		return errMsg
+	}
+
+	affectedRows := res.RowsAffected()
+	if affectedRows <= 0 {
+		errMsg := fmt.Errorf("no row affected for insert penalty")
+		log.Println("no rows are affected for insert penalty")
+		return errMsg
 	}
 
 	return

@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	books "eigen-backend-test-case/features/books"
+	"eigen-backend-test-case/utils/helper"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -133,7 +135,23 @@ func (s *booksService) ReturnBook(memberCode, bookCode string) (isServerErr bool
 		return true, err
 	}
 
-	err = s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+	returnedTime, err := s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+	if err != nil {
+		return true, err
+	}
+
+	fmt.Println("returned time:", returnedTime)
+	fmt.Println("returned after:", returnedTime.After(borrowedBooksData.BorrowedAt.Time.Add(7*24*time.Hour)))
+
+	// check the penalty
+	if returnedTime.After(borrowedBooksData.BorrowedAt.Time.Add(7 * 24 * time.Hour)) {
+		fmt.Println("pass")
+		penaltyEnd := helper.FormatGoTime(returnedTime.Add(3 * 24 * time.Hour))
+		err = s.repo.InsertPenalty(memberData.ID, returnedTime, penaltyEnd)
+		if err != nil {
+			return true, err
+		}
+	}
 
 	return true, err
 }

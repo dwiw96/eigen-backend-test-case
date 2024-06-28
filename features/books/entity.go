@@ -2,6 +2,7 @@ package books
 
 import (
 	"database/sql"
+	"time"
 )
 
 type Books struct {
@@ -36,8 +37,9 @@ type RepositoryInterface interface {
 	CheckIfMemberPenalized(memberID int) (res bool, err error)
 	InsertBorrowedBook(bookID, memberID int) (err error)
 	CheckMemberBorrowedValidBook(memberID, bookID int) (res bool, err error)
-	UpdateBorrowedBookToReturned(id int) (err error)
+	UpdateBorrowedBookToReturned(id int) (returnedTime time.Time, err error)
 	GetBorrowedBookData(memberID, bookID int) (res BorrowedBooks, err error)
+	InsertPenalty(memberID int, pinaltyStart, pinaltyEnd time.Time) (err error)
 }
 
 type ServiceInterface interface {

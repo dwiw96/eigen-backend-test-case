@@ -454,11 +454,13 @@ func TestUpdateBorrowedBookToReturned(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.name, func(t *testing.T) {
-			err := repoTest.UpdateBorrowedBookToReturned(v.input)
+			returnedTime, err := repoTest.UpdateBorrowedBookToReturned(v.input)
 			if !v.err {
 				require.NoError(t, err)
+				assert.NotEmpty(t, returnedTime)
 			} else {
 				require.Error(t, err)
+				assert.Equal(t, time.Time{}, returnedTime)
 			}
 		})
 	}
@@ -527,6 +529,35 @@ func TestGetBorrowedBookData(t *testing.T) {
 			if !v.err {
 				require.NoError(t, err)
 				assert.Equal(t, v.ans, res)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestInsertPenalty(t *testing.T) {
+	tests := []struct {
+		name         string
+		memberID     int
+		pinaltyStart time.Time
+		pinaltyEnd   time.Time
+		err          bool
+	}{
+		{
+			name:         "success1",
+			memberID:     1,
+			pinaltyStart: helper.FormatGoTime(time.Now()),
+			pinaltyEnd:   helper.FormatGoTime(time.Now().Add(7 * 24 * time.Hour)),
+			err:          false,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			err := repoTest.InsertPenalty(v.memberID, v.pinaltyStart, v.pinaltyEnd)
+			if !v.err {
+				require.NoError(t, err)
 			} else {
 				require.Error(t, err)
 			}
