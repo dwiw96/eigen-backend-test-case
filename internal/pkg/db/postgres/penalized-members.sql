@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS penalized_members(
         CONSTRAINT pk_penalized_members_id PRIMARY KEY,
     member_id INT NOT NULL,
         CONSTRAINT fk_penalized_members_member_id FOREIGN KEY(member_id) REFERENCES members(id),
-    penalty_start TIMESTAMP NOT NULL,
+    penalty_start TIMESTAMP NOT NULL DEFAULT NOW(),
     penalty_end TIMESTAMP
 );
 

@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS members(
     code VARCHAR(255) NOT NULL,
         CONSTRAINT uq_members_code UNIQUE(code),
     name VARCHAR(255) NOT NULL
+        CONSTRAINT ck_members_name_len CHECK(LENGTH(name) > 0)
 );
 
 CREATE INDEX ix_members_id ON members(id);
@@ -17,8 +18,12 @@ CREATE TABLE IF NOT EXISTS books(
     code VARCHAR(10) NOT NULL,
         CONSTRAINT uq_books_code UNIQUE(code),
     title VARCHAR(255) NOT NULL,
+        CONSTRAINT ck_books_title_len CHECK(LENGTH(title) > 0),
     author VARCHAR(255) NOT NULL,
-    stock INT
+        CONSTRAINT ck_books_author_len CHECK(LENGTH(author) > 0),
+    stock INT,
+        CONSTRAINT ck_books_stock CHECK(stock >= 0),
+    total_amount INT
 );
 
 CREATE INDEX ix_books_id ON books(id);
@@ -31,7 +36,7 @@ CREATE TABLE IF NOT EXISTS penalized_members(
         CONSTRAINT pk_penalized_members_id PRIMARY KEY,
     member_id INT NOT NULL,
         CONSTRAINT fk_penalized_members_member_id FOREIGN KEY(member_id) REFERENCES members(id),
-    penalty_start TIMESTAMP NOT NULL,
+    penalty_start TIMESTAMP NOT NULL DEFAULT NOW(),
     penalty_end TIMESTAMP
 );
 
@@ -46,7 +51,7 @@ CREATE TABLE IF NOT EXISTS borrowed_books(
         CONSTRAINT fk_borrowed_books_book_id FOREIGN KEY(book_id) REFERENCES books(id),
     member_id INT NOT NULL,
         CONSTRAINT fk_borrowed_books_member_id FOREIGN KEY(member_id) REFERENCES members(id),
-    borrowed_at TIMESTAMP NOT NULL,
+    borrowed_at TIMESTAMP NOT NULL DEFAULT NOW(),
     returned_at TIMESTAMP,
     is_returned BOOLEAN
 );
