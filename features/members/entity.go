@@ -13,8 +13,10 @@ type ListOfMembers struct {
 
 type RepositoryInterface interface {
 	ListMembersWithBorrowedAmount() (res []ListOfMembers, err error)
+	InsertListOfMembers(input []Member) (err error)
 }
 
 type ServiceInterface interface {
 	ListMembersWithBorrowedAmount() (res []ListOfMembers, err error)
+	InsertListOfMembers(input []Member) (err error)
 }

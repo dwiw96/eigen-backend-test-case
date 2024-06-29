@@ -25,3 +25,12 @@ func (s *membersService) ListMembersWithBorrowedAmount() (res []members.ListOfMe
 
 	return
 }
+
+func (s *membersService) InsertListOfMembers(input []members.Member) (err error) {
+	err = s.repo.InsertListOfMembers(input)
+	if err != nil {
+		return err
+	}
+
+	return
+}
