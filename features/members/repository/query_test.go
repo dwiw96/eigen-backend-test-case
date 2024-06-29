@@ -110,3 +110,48 @@ func TestListMembersWithBorrowedAmount(t *testing.T) {
 		})
 	}
 }
+
+func TestInsertListOfMembers(t *testing.T) {
+	tests := []struct {
+		name  string
+		input []members.Member
+		err   bool
+	}{
+		{
+			name: "success1",
+			input: []members.Member{
+				{
+					Code: "M007",
+					Name: "Eigen",
+				},
+			},
+			err: false,
+		}, {
+			name: "success1",
+			input: []members.Member{
+				{
+					Code: "M008",
+					Name: "Eigen2",
+				}, {
+					Code: "M009",
+					Name: "Eigen3",
+				}, {
+					Code: "M010",
+					Name: "Eigen4",
+				},
+			},
+			err: false,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			err := repoTest.InsertListOfMembers(v.input)
+			if !v.err {
+				require.NoError(t, err)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}
