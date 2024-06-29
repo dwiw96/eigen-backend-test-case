@@ -6,11 +6,12 @@ import (
 )
 
 type Books struct {
-	ID     int
-	Code   string
-	Title  string
-	Author string
-	Stock  int
+	ID          int
+	Code        string
+	Title       string
+	Author      string
+	Stock       int
+	TotalAmount int
 }
 
 type Member struct {
@@ -40,10 +41,13 @@ type RepositoryInterface interface {
 	UpdateBorrowedBookToReturned(id int) (returnedTime time.Time, err error)
 	GetBorrowedBookData(memberID, bookID int) (res BorrowedBooks, err error)
 	InsertPenalty(memberID int, pinaltyStart, pinaltyEnd time.Time) (err error)
+	UpdateBookStock(bookID, amount int) (err error)
+	ListExistingBooks() (res []Books, err error)
 }
 
 type ServiceInterface interface {
 	InsertListOfBooks(input []Books) (err error)
 	BorrowBooks(memberCode, bookCode string) (book Books, isServerErr bool, err error)
 	ReturnBook(memberCode, bookCode string) (isServerErr bool, err error)
+	ListExistingBooks() (allBooks []Books, err error)
 }

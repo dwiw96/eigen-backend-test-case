@@ -27,14 +27,14 @@ func NewBooksRepository(db *pgxpool.Pool, ctx context.Context) books.RepositoryI
 }
 
 func (r *booksRepository) InsertListOfBooks(input []books.Books) (err error) {
-	query := "INSERT INTO books(code, title, author, stock) VALUES"
+	query := "INSERT INTO books(code, title, author, stock, total_amount) VALUES"
 	var placeholder []string
 	var arguments []interface{}
 
 	for i, v := range input {
-		params := fmt.Sprintf("($%d, $%d, $%d, $%d)", (i*4)+1, (i*4)+2, (i*4)+3, (i*4)+4)
+		params := fmt.Sprintf("($%d, $%d, $%d, $%d, $%d)", (i*5)+1, (i*5)+2, (i*5)+3, (i*5)+4, (i*5)+5)
 		placeholder = append(placeholder, params)
-		arguments = append(arguments, v.Code, v.Title, v.Author, v.Stock)
+		arguments = append(arguments, v.Code, v.Title, v.Author, v.Stock, v.Stock)
 	}
 
 	queryPlaceholder := strings.Join(placeholder, ",")
@@ -61,7 +61,7 @@ func (r *booksRepository) GetBookData(bookCode string) (book books.Books, err er
 	query := `SELECT * FROM books WHERE code=$1`
 
 	row := r.db.QueryRow(r.ctx, query, bookCode)
-	err = row.Scan(&book.ID, &book.Code, &book.Title, &book.Author, &book.Stock)
+	err = row.Scan(&book.ID, &book.Code, &book.Title, &book.Author, &book.Stock, &book.TotalAmount)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			log.Printf("error get book data for code: %s, err: %v\n", bookCode, err)
@@ -214,6 +214,52 @@ func (r *booksRepository) InsertPenalty(memberID int, pinaltyStart, pinaltyEnd t
 		errMsg := fmt.Errorf("no row affected for insert penalty")
 		log.Println("no rows are affected for insert penalty")
 		return errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) UpdateBookStock(bookID, amount int) (err error) {
+	query := `UPDATE books SET stock = stock + $1 WHERE id = $2`
+
+	res, err := r.db.Exec(r.ctx, query, amount, bookID)
+	if err != nil {
+		errMsg := fmt.Errorf("error update book stock")
+		log.Printf("%v, err:%v\n", errMsg, err)
+		return errMsg
+	}
+
+	affectedRows := res.RowsAffected()
+	if affectedRows <= 0 {
+		errMsg := fmt.Errorf("no row updated for update book stock")
+		log.Println("no rows are affected for update book stock")
+		return errMsg
+	}
+
+	return
+}
+
+func (r *booksRepository) ListExistingBooks() (res []books.Books, err error) {
+	query := `SELECT * FROM books WHERE stock > 0 ORDER BY title ASC`
+
+	rows, err := r.db.Query(r.ctx, query)
+	if err != nil {
+		errMsg := fmt.Errorf("error get existing books")
+		log.Printf("%v, err: %v\n", errMsg, err)
+		return nil, errMsg
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var temp books.Books
+		err := rows.Scan(&temp.ID, &temp.Code, &temp.Title, &temp.Author, &temp.Stock, &temp.TotalAmount)
+		if err != nil {
+			errMsg := fmt.Errorf("error scanning get existing books")
+			log.Printf("%v, err: %v\n", errMsg, err)
+			return nil, errMsg
+		}
+
+		res = append(res, temp)
 	}
 
 	return

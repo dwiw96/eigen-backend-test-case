@@ -101,6 +101,11 @@ func (s *booksService) BorrowBooks(memberCode, bookCode string) (book books.Book
 			return true, err
 		}
 
+		err = s.repo.UpdateBookStock(bookData.ID, -1)
+		if err != nil {
+			return true, err
+		}
+
 		return true, err
 	})
 
@@ -135,13 +140,20 @@ func (s *booksService) ReturnBook(memberCode, bookCode string) (isServerErr bool
 		return true, err
 	}
 
-	returnedTime, err := s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
-	if err != nil {
-		return true, err
-	}
+	var returnedTime time.Time
+	isServerErr, err = s.execTx(s.ctx, func(bs *booksService) (bool, error) {
+		returnedTime, err = s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+		if err != nil {
+			return true, err
+		}
 
-	fmt.Println("returned time:", returnedTime)
-	fmt.Println("returned after:", returnedTime.After(borrowedBooksData.BorrowedAt.Time.Add(7*24*time.Hour)))
+		err = s.repo.UpdateBookStock(bookData.ID, 1)
+		if err != nil {
+			return true, err
+		}
+
+		return true, err
+	})
 
 	// check the penalty
 	if returnedTime.After(borrowedBooksData.BorrowedAt.Time.Add(7 * 24 * time.Hour)) {
@@ -153,5 +165,14 @@ func (s *booksService) ReturnBook(memberCode, bookCode string) (isServerErr bool
 		}
 	}
 
-	return true, err
+	return isServerErr, err
+}
+
+func (s *booksService) ListExistingBooks() (allBooks []books.Books, err error) {
+	allBooks, err = s.repo.ListExistingBooks()
+	if err != nil {
+		return nil, err
+	}
+
+	return
 }
