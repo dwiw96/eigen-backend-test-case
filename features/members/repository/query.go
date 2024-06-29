@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	members "eigen-backend-test-case/features/members"
 
@@ -53,4 +54,36 @@ func (r *membersRepository) ListMembersWithBorrowedAmount() (res []members.ListO
 	}
 
 	return
+}
+
+func (r *membersRepository) InsertListOfMembers(input []members.Member) (err error) {
+	query := `INSERT INTO members(code, name) VALUES`
+
+	var placeholder []string
+	var arguments []interface{}
+
+	for i, v := range input {
+		params := fmt.Sprintf("($%d, $%d)", (i*2)+1, (i*2)+2)
+		placeholder = append(placeholder, params)
+		arguments = append(arguments, v.Code, v.Name)
+	}
+
+	queryPlaceholder := strings.Join(placeholder, ",")
+	query += queryPlaceholder
+
+	res, err := r.db.Exec(r.ctx, query, arguments...)
+	if err != nil {
+		errMsg := fmt.Errorf("error insert list of members")
+		log.Printf("%v, err:%v\n", errMsg, err)
+		return errMsg
+	}
+
+	affectedRows := res.RowsAffected()
+	if affectedRows <= 0 {
+		errMsg := fmt.Errorf("no members added to database for insert list of members")
+		log.Println("no rows are affected for insert list of members")
+		return errMsg
+	}
+
+	return err
 }
