@@ -186,7 +186,7 @@ func (r *booksRepository) UpdateBorrowedBookToReturned(id int) (returnedTime tim
 }
 
 func (r *booksRepository) GetBorrowedBookData(memberID, bookID int) (res books.BorrowedBooks, err error) {
-	query := `SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2 ORDER BY id DESC LIMIT 1`
+	query := `SELECT * FROM borrowed_books WHERE member_id = $1 AND book_id = $2 AND is_returned = false ORDER BY id ASC LIMIT 1`
 
 	err = r.db.QueryRow(r.ctx, query, memberID, bookID).Scan(&res.ID, &res.BookID, &res.MemberID, &res.BorrowedAt, &res.ReturnedAt, &res.IsReturned)
 	if err != nil {
