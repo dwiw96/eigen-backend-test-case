@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS members(
     code VARCHAR(255) NOT NULL,
         CONSTRAINT uq_members_code UNIQUE(code),
     name VARCHAR(255) NOT NULL
+        CONSTRAINT ck_members_name_len CHECK(LENGTH(name) > 0)
 );
 
 CREATE INDEX ix_members_id ON members(id);
