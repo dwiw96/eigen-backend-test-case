@@ -3,7 +3,6 @@ package delivery
 import members "eigen-backend-test-case/features/members"
 
 type ListOfMembersResponse struct {
-	ID             int    `json:"id"`
 	Code           string `json:"code"`
 	Name           string `json:"name"`
 	BorrowedAmount int    `json:"borrowed_amount"`
