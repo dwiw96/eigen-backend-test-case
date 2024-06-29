@@ -1,0 +1,491 @@
+openapi: 3.0.0
+info:
+  title: eigen-backend-test-case
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: Books
+  - name: Members
+paths:
+  /api/v1/books/insert_list_of_books:
+    post:
+      tags:
+        - Books
+      summary: Insert  List Of Books
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - code: JK-45
+                  title: Harry Potter
+                  author: J.K Rowling
+                  stock: 1
+                - code: SHR-1
+                  title: A Study in Scarlet
+                  author: Arthur Conan Doyle
+                  stock: 1
+                - code: TW-11
+                  title: Twilight
+                  author: Stephenie Meyer
+                  stock: 1
+                - code: HOB-83
+                  title: The Hobbit, or There and Back Again
+                  author: J.R.R. Tolkien
+                  stock: 1
+                - code: NRN-7
+                  title: The Lion, the Witch and the Wardrobe
+                  author: C.S. Lewis
+                  stock: 1
+                - code: ACD-01
+                  title: Sherlock Holmes Chapter 1
+                  author: Sir Arthur Conan Doyle
+                  stock: 3
+                - code: ACD-02
+                  title: Sherlock Holmes Chapter 2
+                  author: Sir Arthur Conan Doyle
+                  stock: 7
+                - code: ACD-03
+                  title: Sherlock Holmes Chapter 3
+                  author: Sir Arthur Conan Doyle
+                  stock: 14
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:10:44 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '131'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                description: books stored in database
+                error_message: ''
+                execute_at: 2024/06/30 00:10:44.471
+                result: success
+                value: ''
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain; charset=utf-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:11:35 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '154'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: >
+                {"description":"error insert list of
+                books","error_message":"Internal Server
+                Error","execute_at":"2024/06/30
+                00:11:35.665","result":"failure","value":""}
+  /api/v1/books/borrow_book:
+    post:
+      tags:
+        - Books
+      summary: Borrow Book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                member_code: M006
+                book_code: ACD-01
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:16:04 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '210'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                description: borrowed book data
+                error_message: ''
+                execute_at: 2024/06/30 00:16:04.201
+                result: success
+                value:
+                  code: ACD-03
+                  title: Sherlock Holmes Chapter 3
+                  author: Sir Arthur Conan Doyle
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain; charset=utf-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:16:37 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '151'
+          content:
+            text/plain:
+              schema:
+                type: string
+              examples:
+                example-0:
+                  summary: (failed) borrowed more than 2 books
+                  value: >
+                    {"description":"member borrowed books more than
+                    2","error_message":"Bad Request","execute_at":"2024/06/30
+                    00:16:37.713","result":"failure","value":""}
+                example-1:
+                  summary: (failed) Penalized Member Borrow Book
+                  value: >
+                    {"description":"member is pinalized","error_message":"Bad
+                    Request","execute_at":"2024/07/08
+                    00:33:02.024","result":"failure","value":""}
+  /api/v1/books/return_book:
+    put:
+      tags:
+        - Books
+      summary: Return Book
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                member_code: M004
+                book_code: JK-45
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:30:17 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '123'
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-0:
+                  summary: (success) Return Book
+                  value:
+                    description: book is returned
+                    error_message: ''
+                    execute_at: 2024/06/30 00:30:17.554
+                    result: success
+                    value: ''
+                example-1:
+                  summary: (success) Return Book after 7 days
+                  value:
+                    description: book is returned
+                    error_message: ''
+                    execute_at: 2024/07/08 00:32:01.991
+                    result: success
+                    value: ''
+        '400':
+          description: Bad Request
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain; charset=utf-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:34:35 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '150'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: >
+                {"description":"member is not borrowed this
+                book","error_message":"Bad Request","execute_at":"2024/06/30
+                00:34:35.038","result":"failure","value":""}
+  /api/v1/books/list_of_existing_books:
+    get:
+      tags:
+        - Books
+      summary: List Existing Books
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:35:19 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '851'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                description: list of existing books
+                error_message: ''
+                execute_at: 2024/06/30 00:35:19.936
+                result: success
+                value:
+                  - code: SHR-1
+                    title: A Study in Scarlet
+                    author: Arthur Conan Doyle
+                    stock: 1
+                  - code: JK-45
+                    title: Harry Potter
+                    author: J.K Rowling
+                    stock: 1
+                  - code: ACD-01
+                    title: Sherlock Holmes Chapter 1
+                    author: Sir Arthur Conan Doyle
+                    stock: 3
+                  - code: ACD-02
+                    title: Sherlock Holmes Chapter 2
+                    author: Sir Arthur Conan Doyle
+                    stock: 7
+                  - code: ACD-03
+                    title: Sherlock Holmes Chapter 3
+                    author: Sir Arthur Conan Doyle
+                    stock: 12
+                  - code: HOB-83
+                    title: The Hobbit, or There and Back Again
+                    author: J.R.R. Tolkien
+                    stock: 1
+                  - code: NRN-7
+                    title: The Lion, the Witch and the Wardrobe
+                    author: C.S. Lewis
+                    stock: 1
+                  - code: TW-11
+                    title: Twilight
+                    author: Stephenie Meyer
+                    stock: 1
+  /api/v1/members/list_of_members:
+    get:
+      tags:
+        - Members
+      summary: List of Members
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:35:53 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '445'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                description: list of members with borrowed amount
+                error_message: ''
+                execute_at: 2024/06/30 00:35:53.659
+                result: success
+                value:
+                  - code: M001
+                    name: Angga
+                    borrowed_amount: 0
+                  - code: M002
+                    name: Ferry
+                    borrowed_amount: 0
+                  - code: M003
+                    name: Putri
+                    borrowed_amount: 0
+                  - code: M004
+                    name: Dwi
+                    borrowed_amount: 2
+                  - code: M005
+                    name: Wahyu
+                    borrowed_amount: 0
+                  - code: M006
+                    name: Yudi
+                    borrowed_amount: 0
+  /api/v1/members/insert_list_of_members:
+    post:
+      tags:
+        - Members
+      summary: Insert List of Members
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                - code: M001
+                  name: Angga
+                - code: M002
+                  name: Ferry
+                - code: M003
+                  name: Putri
+                - code: M004
+                  name: Dwi
+                - code: M005
+                  name: Wahyu
+                - code: M006
+                  name: Yudi
+      responses:
+        '200':
+          description: OK
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 15:12:45 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '133'
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                description: members stored in database
+                error_message: ''
+                execute_at: 2024/06/30 00:12:45.823
+                result: success
+                value: ''
+        '500':
+          description: Internal Server Error
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                example: text/plain; charset=utf-8
+            Vary:
+              schema:
+                type: string
+                example: Origin
+            X-Content-Type-Options:
+              schema:
+                type: string
+                example: nosniff
+            Date:
+              schema:
+                type: string
+                example: Sat, 29 Jun 2024 14:59:35 GMT
+            Content-Length:
+              schema:
+                type: integer
+                example: '156'
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: >
+                {"description":"error insert list of
+                members","error_message":"Internal Server
+                Error","execute_at":"2024/06/29
+                23:59:35.575","result":"failure","value":""}
