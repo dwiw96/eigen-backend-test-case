@@ -1,0 +1,796 @@
+{
+	"info": {
+		"_postman_id": "77481ab6-8408-4202-8868-06c7f2daacb4",
+		"name": "eigen-backend-test-case",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24088817"
+	},
+	"item": [
+		{
+			"name": "Books",
+			"item": [
+				{
+					"name": "Insert  List Of Books",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"code\": \"JK-45\",\n        \"title\": \"Harry Potter\",\n        \"author\": \"J.K Rowling\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"SHR-1\",\n        \"title\": \"A Study in Scarlet\",\n        \"author\": \"Arthur Conan Doyle\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"TW-11\",\n        \"title\": \"Twilight\",\n        \"author\": \"Stephenie Meyer\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"HOB-83\",\n        \"title\": \"The Hobbit, or There and Back Again\",\n        \"author\": \"J.R.R. Tolkien\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"NRN-7\",\n        \"title\": \"The Lion, the Witch and the Wardrobe\",\n        \"author\": \"C.S. Lewis\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"ACD-01\",\n        \"title\": \"Sherlock Holmes Chapter 1\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 3\n    }, {\n        \"code\": \"ACD-02\",\n        \"title\": \"Sherlock Holmes Chapter 2\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 7\n    }, {\n        \"code\": \"ACD-03\",\n        \"title\": \"Sherlock Holmes Chapter 3\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 14\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/insert_list_of_books",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"insert_list_of_books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(success) Insert  List Of Books",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"code\": \"JK-45\",\n        \"title\": \"Harry Potter\",\n        \"author\": \"J.K Rowling\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"SHR-1\",\n        \"title\": \"A Study in Scarlet\",\n        \"author\": \"Arthur Conan Doyle\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"TW-11\",\n        \"title\": \"Twilight\",\n        \"author\": \"Stephenie Meyer\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"HOB-83\",\n        \"title\": \"The Hobbit, or There and Back Again\",\n        \"author\": \"J.R.R. Tolkien\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"NRN-7\",\n        \"title\": \"The Lion, the Witch and the Wardrobe\",\n        \"author\": \"C.S. Lewis\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"ACD-01\",\n        \"title\": \"Sherlock Holmes Chapter 1\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 3\n    }, {\n        \"code\": \"ACD-02\",\n        \"title\": \"Sherlock Holmes Chapter 2\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 7\n    }, {\n        \"code\": \"ACD-03\",\n        \"title\": \"Sherlock Holmes Chapter 3\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 14\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/insert_list_of_books",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"insert_list_of_books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:10:44 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "131"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"books stored in database\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:10:44.471\",\n    \"result\": \"success\",\n    \"value\": \"\"\n}"
+						},
+						{
+							"name": "(failed) duplicated code",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"code\": \"JK-45\",\n        \"title\": \"Harry Potter\",\n        \"author\": \"J.K Rowling\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"SHR-1\",\n        \"title\": \"A Study in Scarlet\",\n        \"author\": \"Arthur Conan Doyle\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"TW-11\",\n        \"title\": \"Twilight\",\n        \"author\": \"Stephenie Meyer\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"HOB-83\",\n        \"title\": \"The Hobbit, or There and Back Again\",\n        \"author\": \"J.R.R. Tolkien\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"NRN-7\",\n        \"title\": \"The Lion, the Witch and the Wardrobe\",\n        \"author\": \"C.S. Lewis\",\n        \"stock\": 1\n    },\n    {\n        \"code\": \"ACD-01\",\n        \"title\": \"Sherlock Holmes Chapter 1\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 3\n    }, {\n        \"code\": \"ACD-02\",\n        \"title\": \"Sherlock Holmes Chapter 2\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 7\n    }, {\n        \"code\": \"ACD-03\",\n        \"title\": \"Sherlock Holmes Chapter 3\",\n        \"author\": \"Sir Arthur Conan Doyle\",\n        \"stock\": 14\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/insert_list_of_books",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"insert_list_of_books"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:11:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "154"
+								}
+							],
+							"cookie": [],
+							"body": "{\"description\":\"error insert list of books\",\"error_message\":\"Internal Server Error\",\"execute_at\":\"2024/06/30 00:11:35.665\",\"result\":\"failure\",\"value\":\"\"}\n"
+						}
+					]
+				},
+				{
+					"name": "Borrow Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"member_code\": \"M006\",\n    \"book_code\": \"ACD-01\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/borrow_book",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"borrow_book"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(success) Borrow Book",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M004\",\n    \"book_code\": \"ACD-03\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/borrow_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"borrow_book"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:16:04 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "210"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"borrowed book data\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:16:04.201\",\n    \"result\": \"success\",\n    \"value\": {\n        \"code\": \"ACD-03\",\n        \"title\": \"Sherlock Holmes Chapter 3\",\n        \"author\": \"Sir Arthur Conan Doyle\"\n    }\n}"
+						},
+						{
+							"name": "(failed) borrowed more than 2 books",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M004\",\n    \"book_code\": \"ACD-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/borrow_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"borrow_book"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:16:37 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "151"
+								}
+							],
+							"cookie": [],
+							"body": "{\"description\":\"member borrowed books more than 2\",\"error_message\":\"Bad Request\",\"execute_at\":\"2024/06/30 00:16:37.713\",\"result\":\"failure\",\"value\":\"\"}\n"
+						},
+						{
+							"name": "(failed) Penalized Member Borrow Book",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M006\",\n    \"book_code\": \"ACD-01\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/borrow_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"borrow_book"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 07 Jul 2024 15:33:02 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "137"
+								}
+							],
+							"cookie": [],
+							"body": "{\"description\":\"member is pinalized\",\"error_message\":\"Bad Request\",\"execute_at\":\"2024/07/08 00:33:02.024\",\"result\":\"failure\",\"value\":\"\"}\n"
+						}
+					]
+				},
+				{
+					"name": "Return Book",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"member_code\": \"M004\",\n    \"book_code\": \"JK-45\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/return_book",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"return_book"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(success) Return Book",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M005\",\n    \"book_code\": \"ACD-02\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/return_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"return_book"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:30:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "123"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"book is returned\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:30:17.554\",\n    \"result\": \"success\",\n    \"value\": \"\"\n}"
+						},
+						{
+							"name": "(success) Return Book after 7 days",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M006\",\n    \"book_code\": \"ACD-02\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/return_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"return_book"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 07 Jul 2024 15:32:01 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "123"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"book is returned\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/07/08 00:32:01.991\",\n    \"result\": \"success\",\n    \"value\": \"\"\n}"
+						},
+						{
+							"name": "(failed) Return Wrong Book",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"member_code\": \"M004\",\n    \"book_code\": \"JK-45\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/return_book",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"return_book"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:34:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "150"
+								}
+							],
+							"cookie": [],
+							"body": "{\"description\":\"member is not borrowed this book\",\"error_message\":\"Bad Request\",\"execute_at\":\"2024/06/30 00:34:35.038\",\"result\":\"failure\",\"value\":\"\"}\n"
+						}
+					]
+				},
+				{
+					"name": "List Existing Books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/books/list_of_existing_books",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"books",
+								"list_of_existing_books"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(success) List Of All Existing Books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/books/list_of_existing_books",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"list_of_existing_books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:35:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "851"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"list of existing books\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:35:19.936\",\n    \"result\": \"success\",\n    \"value\": [\n        {\n            \"code\": \"SHR-1\",\n            \"title\": \"A Study in Scarlet\",\n            \"author\": \"Arthur Conan Doyle\",\n            \"stock\": 1\n        },\n        {\n            \"code\": \"JK-45\",\n            \"title\": \"Harry Potter\",\n            \"author\": \"J.K Rowling\",\n            \"stock\": 1\n        },\n        {\n            \"code\": \"ACD-01\",\n            \"title\": \"Sherlock Holmes Chapter 1\",\n            \"author\": \"Sir Arthur Conan Doyle\",\n            \"stock\": 3\n        },\n        {\n            \"code\": \"ACD-02\",\n            \"title\": \"Sherlock Holmes Chapter 2\",\n            \"author\": \"Sir Arthur Conan Doyle\",\n            \"stock\": 7\n        },\n        {\n            \"code\": \"ACD-03\",\n            \"title\": \"Sherlock Holmes Chapter 3\",\n            \"author\": \"Sir Arthur Conan Doyle\",\n            \"stock\": 12\n        },\n        {\n            \"code\": \"HOB-83\",\n            \"title\": \"The Hobbit, or There and Back Again\",\n            \"author\": \"J.R.R. Tolkien\",\n            \"stock\": 1\n        },\n        {\n            \"code\": \"NRN-7\",\n            \"title\": \"The Lion, the Witch and the Wardrobe\",\n            \"author\": \"C.S. Lewis\",\n            \"stock\": 1\n        },\n        {\n            \"code\": \"TW-11\",\n            \"title\": \"Twilight\",\n            \"author\": \"Stephenie Meyer\",\n            \"stock\": 1\n        }\n    ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Members",
+			"item": [
+				{
+					"name": "List of Members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/members/list_of_members",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"list_of_members"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(success) List of Members with Amount of Borrowed Books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/api/v1/members/list_of_members",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"members",
+										"list_of_members"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:35:53 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "445"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"list of members with borrowed amount\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:35:53.659\",\n    \"result\": \"success\",\n    \"value\": [\n        {\n            \"code\": \"M001\",\n            \"name\": \"Angga\",\n            \"borrowed_amount\": 0\n        },\n        {\n            \"code\": \"M002\",\n            \"name\": \"Ferry\",\n            \"borrowed_amount\": 0\n        },\n        {\n            \"code\": \"M003\",\n            \"name\": \"Putri\",\n            \"borrowed_amount\": 0\n        },\n        {\n            \"code\": \"M004\",\n            \"name\": \"Dwi\",\n            \"borrowed_amount\": 2\n        },\n        {\n            \"code\": \"M005\",\n            \"name\": \"Wahyu\",\n            \"borrowed_amount\": 0\n        },\n        {\n            \"code\": \"M006\",\n            \"name\": \"Yudi\",\n            \"borrowed_amount\": 0\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Insert List of Members",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n        \"code\": \"M001\",\n        \"name\": \"Angga\"\n    }, {\n        \"code\": \"M002\",\n        \"name\": \"Ferry\"\n    }, {\n        \"code\": \"M003\",\n        \"name\": \"Putri\"\n    }, {\n        \"code\": \"M004\",\n        \"name\": \"Dwi\"\n    }, {\n        \"code\": \"M005\",\n        \"name\": \"Wahyu\"\n    }, {\n        \"code\": \"M006\",\n        \"name\": \"Yudi\"\n    }\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/members/insert_list_of_members",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"members",
+								"insert_list_of_members"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "(failed) Insert List Of Members",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"code\": \"M001\",\n        \"name\": \"Angga\"\n    }, {\n        \"code\": \"M002\",\n        \"name\": \"Ferry\"\n    }, {\n        \"code\": \"M003\",\n        \"name\": \"Putri\"\n    }, {\n        \"code\": \"M004\",\n        \"name\": \"Dwi\"\n    }, {\n        \"code\": \"M005\",\n        \"name\": \"Wahyu\"\n    }, {\n        \"code\": \"M006\",\n        \"name\": \"Yudi\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/members/insert_list_of_members",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"members",
+										"insert_list_of_members"
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 14:59:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "156"
+								}
+							],
+							"cookie": [],
+							"body": "{\"description\":\"error insert list of members\",\"error_message\":\"Internal Server Error\",\"execute_at\":\"2024/06/29 23:59:35.575\",\"result\":\"failure\",\"value\":\"\"}\n"
+						},
+						{
+							"name": "(success) Insert List of Members",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"code\": \"M001\",\n        \"name\": \"Angga\"\n    }, {\n        \"code\": \"M002\",\n        \"name\": \"Ferry\"\n    }, {\n        \"code\": \"M003\",\n        \"name\": \"Putri\"\n    }, {\n        \"code\": \"M004\",\n        \"name\": \"Dwi\"\n    }, {\n        \"code\": \"M005\",\n        \"name\": \"Wahyu\"\n    }, {\n        \"code\": \"M006\",\n        \"name\": \"Yudi\"\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/api/v1/members/insert_list_of_members",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"api",
+										"v1",
+										"members",
+										"insert_list_of_members"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 29 Jun 2024 15:12:45 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "133"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"description\": \"members stored in database\",\n    \"error_message\": \"\",\n    \"execute_at\": \"2024/06/30 00:12:45.823\",\n    \"result\": \"success\",\n    \"value\": \"\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
