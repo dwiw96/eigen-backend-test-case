@@ -17,3 +17,24 @@ func toBookResponse(input books.Books) (res BookResponse) {
 
 	return
 }
+
+type ListExistingBookResponse struct {
+	Code   string `json:"code"`
+	Title  string `json:"title"`
+	Author string `json:"author"`
+	Stock  int    `json:"stock"`
+}
+
+func toListExistingBooks(input []books.Books) (res []ListExistingBookResponse) {
+	for _, v := range input {
+		var temp ListExistingBookResponse
+		temp.Code = v.Code
+		temp.Title = v.Title
+		temp.Author = v.Author
+		temp.Stock = v.Stock
+
+		res = append(res, temp)
+	}
+
+	return
+}

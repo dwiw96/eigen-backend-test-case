@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	books "eigen-backend-test-case/features/books"
+	"eigen-backend-test-case/utils/helper"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -99,6 +101,11 @@ func (s *booksService) BorrowBooks(memberCode, bookCode string) (book books.Book
 			return true, err
 		}
 
+		err = s.repo.UpdateBookStock(bookData.ID, -1)
+		if err != nil {
+			return true, err
+		}
+
 		return true, err
 	})
 
@@ -133,7 +140,39 @@ func (s *booksService) ReturnBook(memberCode, bookCode string) (isServerErr bool
 		return true, err
 	}
 
-	err = s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+	var returnedTime time.Time
+	isServerErr, err = s.execTx(s.ctx, func(bs *booksService) (bool, error) {
+		returnedTime, err = s.repo.UpdateBorrowedBookToReturned(borrowedBooksData.ID)
+		if err != nil {
+			return true, err
+		}
 
-	return true, err
+		err = s.repo.UpdateBookStock(bookData.ID, 1)
+		if err != nil {
+			return true, err
+		}
+
+		return true, err
+	})
+
+	// check the penalty
+	if returnedTime.After(borrowedBooksData.BorrowedAt.Time.Add(7 * 24 * time.Hour)) {
+		fmt.Println("pass")
+		penaltyEnd := helper.FormatGoTime(returnedTime.Add(3 * 24 * time.Hour))
+		err = s.repo.InsertPenalty(memberData.ID, returnedTime, penaltyEnd)
+		if err != nil {
+			return true, err
+		}
+	}
+
+	return isServerErr, err
+}
+
+func (s *booksService) ListExistingBooks() (allBooks []books.Books, err error) {
+	allBooks, err = s.repo.ListExistingBooks()
+	if err != nil {
+		return nil, err
+	}
+
+	return
 }

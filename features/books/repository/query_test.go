@@ -53,30 +53,35 @@ func TestInsertListOfBooks(t *testing.T) {
 			name: "success1",
 			input: []books.Books{
 				{
-					Code:   "JK-45",
-					Title:  "Harry Potter",
-					Author: "J.K Rowling",
-					Stock:  1,
+					Code:        "JK-45",
+					Title:       "Harry Potter",
+					Author:      "J.K Rowling",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:   "SHR-1",
-					Title:  "A Study in Scarlet",
-					Author: "Arthur Conan Doyle",
-					Stock:  1,
+					Code:        "SHR-1",
+					Title:       "A Study in Scarlet",
+					Author:      "Arthur Conan Doyle",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:   "TW-11",
-					Title:  "Twilight",
-					Author: "Stephenie Meyer",
-					Stock:  1,
+					Code:        "TW-11",
+					Title:       "Twilight",
+					Author:      "Stephenie Meyer",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:   "HOB-83",
-					Title:  "The Hobbit, or There and Back Again",
-					Author: "J.R.R. Tolkien",
-					Stock:  1,
+					Code:        "HOB-83",
+					Title:       "The Hobbit, or There and Back Again",
+					Author:      "J.R.R. Tolkien",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:   "NRN-7",
-					Title:  "The Lion, the Witch and the Wardrobe",
-					Author: "C.S. Lewis",
-					Stock:  1,
+					Code:        "NRN-7",
+					Title:       "The Lion, the Witch and the Wardrobe",
+					Author:      "C.S. Lewis",
+					Stock:       1,
+					TotalAmount: 1,
 				},
 			},
 			err: false,
@@ -85,19 +90,22 @@ func TestInsertListOfBooks(t *testing.T) {
 			name: "error1",
 			input: []books.Books{
 				{
-					Code:   "JK-45",
-					Title:  "",
-					Author: "J.K Rowling",
-					Stock:  1,
+					Code:        "JK-45",
+					Title:       "",
+					Author:      "J.K Rowling",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:  "SHR-1",
-					Title: "A Study in Scarlet",
-					Stock: 1,
+					Code:        "SHR-1",
+					Title:       "A Study in Scarlet",
+					Stock:       1,
+					TotalAmount: 1,
 				}, {
-					Code:   "TW-11",
-					Title:  "Twilight",
-					Author: "Stephenie Meyer",
-					Stock:  0,
+					Code:        "TW-11",
+					Title:       "Twilight",
+					Author:      "Stephenie Meyer",
+					Stock:       0,
+					TotalAmount: 1,
 				},
 			},
 			err: true,
@@ -454,11 +462,13 @@ func TestUpdateBorrowedBookToReturned(t *testing.T) {
 
 	for _, v := range tests {
 		t.Run(v.name, func(t *testing.T) {
-			err := repoTest.UpdateBorrowedBookToReturned(v.input)
+			returnedTime, err := repoTest.UpdateBorrowedBookToReturned(v.input)
 			if !v.err {
 				require.NoError(t, err)
+				assert.NotEmpty(t, returnedTime)
 			} else {
 				require.Error(t, err)
+				assert.Equal(t, time.Time{}, returnedTime)
 			}
 		})
 	}
@@ -527,6 +537,161 @@ func TestGetBorrowedBookData(t *testing.T) {
 			if !v.err {
 				require.NoError(t, err)
 				assert.Equal(t, v.ans, res)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestInsertPenalty(t *testing.T) {
+	tests := []struct {
+		name         string
+		memberID     int
+		pinaltyStart time.Time
+		pinaltyEnd   time.Time
+		err          bool
+	}{
+		{
+			name:         "success1",
+			memberID:     1,
+			pinaltyStart: helper.FormatGoTime(time.Now()),
+			pinaltyEnd:   helper.FormatGoTime(time.Now().Add(7 * 24 * time.Hour)),
+			err:          false,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			err := repoTest.InsertPenalty(v.memberID, v.pinaltyStart, v.pinaltyEnd)
+			if !v.err {
+				require.NoError(t, err)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestListExistingBooks(t *testing.T) {
+	tests := []struct {
+		name string
+		ans  []books.Books
+		err  bool
+	}{
+		{
+			name: "success1",
+			ans: []books.Books{
+				{
+					ID:          2,
+					Code:        "SHR-1",
+					Title:       "A Study in Scarlet",
+					Author:      "Arthur Conan Doyle",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          1,
+					Code:        "JK-45",
+					Title:       "Harry Potter",
+					Author:      "J.K Rowling",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          6,
+					Code:        "ACD-01",
+					Title:       "Sherlock Holmes Chapter 1",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       3,
+					TotalAmount: 3,
+				}, {
+					ID:          7,
+					Code:        "ACD-02",
+					Title:       "Sherlock Holmes Chapter 2",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       6,
+					TotalAmount: 7,
+				}, {
+					ID:          8,
+					Code:        "ACD-03",
+					Title:       "Sherlock Holmes Chapter 3",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       14,
+					TotalAmount: 14,
+				}, {
+					ID:          4,
+					Code:        "HOB-83",
+					Title:       "The Hobbit, or There and Back Again",
+					Author:      "J.R.R. Tolkien",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          5,
+					Code:        "NRN-7",
+					Title:       "The Lion, the Witch and the Wardrobe",
+					Author:      "C.S. Lewis",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          3,
+					Code:        "TW-11",
+					Title:       "Twilight",
+					Author:      "Stephenie Meyer",
+					Stock:       1,
+					TotalAmount: 1,
+				},
+			},
+			err: false,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			res, err := repoTest.ListExistingBooks()
+			if !v.err {
+				require.NoError(t, err)
+				assert.Equal(t, v.ans, res)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}
+
+func TestUpdateBookStock(t *testing.T) {
+	tests := []struct {
+		name   string
+		bookID int
+		amount int
+		err    bool
+	}{
+		{
+			name:   "reduce",
+			bookID: 8,
+			amount: -1,
+			err:    false,
+		}, {
+			name:   "add",
+			bookID: 6,
+			amount: 1,
+			err:    false,
+		}, {
+			name:   "error_minus",
+			bookID: 1,
+			amount: -3,
+			err:    true,
+		}, {
+			name:   "error_2",
+			bookID: 80,
+			amount: 1,
+			err:    true,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			err := repoTest.UpdateBookStock(v.bookID, v.amount)
+			if !v.err {
+				require.NoError(t, err)
 			} else {
 				require.Error(t, err)
 			}

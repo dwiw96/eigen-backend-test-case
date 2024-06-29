@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS borrowed_books(
         CONSTRAINT fk_borrowed_books_book_id FOREIGN KEY(book_id) REFERENCES books(id),
     member_id INT NOT NULL,
         CONSTRAINT fk_borrowed_books_member_id FOREIGN KEY(member_id) REFERENCES members(id),
-    borrowed_at TIMESTAMP NOT NULL,
+    borrowed_at TIMESTAMP NOT NULL DEFAULT NOW(),
     returned_at TIMESTAMP,
     is_returned BOOLEAN
 );

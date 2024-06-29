@@ -203,3 +203,87 @@ func TestReturnBook(t *testing.T) {
 		})
 	}
 }
+
+func TestListExistingBooks(t *testing.T) {
+	tests := []struct {
+		name string
+		ans  []books.Books
+		err  bool
+	}{
+		{
+			name: "success1",
+			ans: []books.Books{
+				{
+					ID:          2,
+					Code:        "SHR-1",
+					Title:       "A Study in Scarlet",
+					Author:      "Arthur Conan Doyle",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          1,
+					Code:        "JK-45",
+					Title:       "Harry Potter",
+					Author:      "J.K Rowling",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          6,
+					Code:        "ACD-01",
+					Title:       "Sherlock Holmes Chapter 1",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       3,
+					TotalAmount: 3,
+				}, {
+					ID:          7,
+					Code:        "ACD-02",
+					Title:       "Sherlock Holmes Chapter 2",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       6,
+					TotalAmount: 7,
+				}, {
+					ID:          8,
+					Code:        "ACD-03",
+					Title:       "Sherlock Holmes Chapter 3",
+					Author:      "Sir Arthur Conan Doyle",
+					Stock:       14,
+					TotalAmount: 14,
+				}, {
+					ID:          4,
+					Code:        "HOB-83",
+					Title:       "The Hobbit, or There and Back Again",
+					Author:      "J.R.R. Tolkien",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          5,
+					Code:        "NRN-7",
+					Title:       "The Lion, the Witch and the Wardrobe",
+					Author:      "C.S. Lewis",
+					Stock:       1,
+					TotalAmount: 1,
+				}, {
+					ID:          3,
+					Code:        "TW-11",
+					Title:       "Twilight",
+					Author:      "Stephenie Meyer",
+					Stock:       1,
+					TotalAmount: 1,
+				},
+			},
+			err: false,
+		},
+	}
+
+	for _, v := range tests {
+		t.Run(v.name, func(t *testing.T) {
+			res, err := serviceTest.ListExistingBooks()
+			if !v.err {
+				require.NoError(t, err)
+				assert.Equal(t, v.ans, res)
+			} else {
+				require.Error(t, err)
+			}
+		})
+	}
+}

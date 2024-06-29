@@ -18,6 +18,7 @@ func toBooksDelivery(input []BooksRequest) (res []books.Books) {
 		temp.Title = v.Title
 		temp.Author = v.Author
 		temp.Stock = v.Stock
+		temp.TotalAmount = v.Stock
 
 		res = append(res, temp)
 	}
